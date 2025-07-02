@@ -55,7 +55,8 @@ class AnthropicCUAClient(AgentClient):
     ):
         super().__init__(model, instructions, config, logger, handler)
         self.anthropic_sdk_client = Anthropic(
-            api_key=config.options.get("apiKey") or os.getenv("ANTHROPIC_API_KEY")
+            api_key=config.options.get("apiKey") or os.getenv("ANTHROPIC_API_KEY"),
+            base_url=config.options.get("base_url") or os.getenv("ANTHROPIC_BASE_URL"),
         )
 
         dimensions = (

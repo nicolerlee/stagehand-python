@@ -4,29 +4,31 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
-# 添加项目根目录到Python路径，以便导入stagehand
+# 添加项目根目录到Python路径，以便导入stagehand和配置
 current_dir = Path(__file__).parent
 project_root = current_dir.parent
 sys.path.insert(0, str(project_root))
 
-from stagehand import Stagehand, StagehandConfig
+from stagehand import Stagehand
+# 导入简化的配置文件
+from stagehand_config import *
 
 # 加载环境变量
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 async def open_h5_novel_page():
     """打开H5小说页面并自动化操作"""
-    # 创建配置
-    config = StagehandConfig(
-        env="LOCAL",  # 或者 "BROWSERBASE"
-        # api_key=os.getenv("BROWSERBASE_API_KEY"),
-        # project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
-        model_name="google/gemini-2.5-flash-preview-05-20",
-        model_client_options={"apiKey": os.getenv("MODEL_API_KEY")},
-        verbose=1,
-        headless=False,  # 设置为 False 以便观察浏览器操作
-        dom_settle_timeout_ms=3000,
-    )
+    
+    # === 使用预定义配置（推荐） ===
+    config = local_openai  # 直接使用配置实例
+    
+    # === 其他配置选项 ===
+    # config = local_gemini     # 本地Gemini
+    # config = local_claude     # 本地Claude
+    # config = headless_deepseek # 无头模式
+    
+    # === 自定义配置 ===
+    # config = make_config("gemini", "local", verbose=1, dom_settle_timeout_ms=3000)
     
     stagehand = Stagehand(config)
 
@@ -87,6 +89,14 @@ async def open_h5_novel_page():
 async def main():
     """主函数"""
     try:
+        # 显示当前使用的配置信息
+        config = local_deepseek
+        print(f"使用配置:")
+        print(f"  环境: {config.env}")
+        print(f"  模型: {config.model_name}")
+        print(f"  详细级别: {config.verbose}")
+        print("")
+        
         await open_h5_novel_page()
     except Exception as e:
         print(f"Script failed: {e}")

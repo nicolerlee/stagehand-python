@@ -38,7 +38,8 @@ class OpenAICUAClient(AgentClient):
         super().__init__(model, instructions, config, logger, handler)
         # TODO pass api key
         self.openai_sdk_client = OpenAISDK(
-            api_key=config.options.get("apiKey") or os.getenv("OPENAI_API_KEY")
+            api_key=config.options.get("apiKey") or os.getenv("OPENAI_API_KEY"),
+            base_url=config.options.get("base_url") or os.getenv("OPENAI_BASE_URL"),
         )
 
         dimensions = (
