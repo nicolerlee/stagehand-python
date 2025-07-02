@@ -8,6 +8,7 @@ from rich.panel import Panel
 from rich.theme import Theme
 
 from stagehand import Stagehand, StagehandConfig, configure_logging
+from stagehand_config import *
 
 # Create a custom theme for consistent styling
 custom_theme = Theme(
@@ -24,8 +25,6 @@ custom_theme = Theme(
 # Create a Rich console instance with our theme
 console = Console(theme=custom_theme)
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
-
 # Configure logging with the utility function
 configure_logging(
     level=logging.INFO,  # Set to INFO for regular logs, DEBUG for detailed
@@ -34,19 +33,25 @@ configure_logging(
 
 async def main():
     # Build a unified configuration object for Stagehand
-    config = StagehandConfig(
-        env="BROWSERBASE",
-        # env="LOCAL",
-        api_key=os.getenv("BROWSERBASE_API_KEY"),
-        project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
-        model_name="gpt-4o",
-        self_heal=True,
-        system_prompt="You are a browser automation assistant that helps users navigate websites effectively.",
-        model_client_options={"apiKey": os.getenv("MODEL_API_KEY")},
-        verbose=1,
-    )
+    # config = StagehandConfig(
+    #     env="BROWSERBASE",
+    #     # env="LOCAL",
+    #     api_key=os.getenv("BROWSERBASE_API_KEY"),
+    #     project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
+    #     model_name="gpt-4o",
+    #     self_heal=True,
+    #     system_prompt="You are a browser automation assistant that helps users navigate websites effectively.",
+    #     model_client_options={"apiKey": os.getenv("MODEL_API_KEY")},
+    #     verbose=1,
+    # )
+
 
     # Create a Stagehand client using the configuration object.
+    # config = local_openai  # 直接使用配置实例
+    config = local_gemini     # 本地Gemini
+    # config = local_claude     # 本地Claude
+    # config = headless_deepseek # 无头模式
+    # config = make_config("gemini", "local", verbose=1, dom_settle_timeout_ms=3000)
     stagehand = Stagehand(config)
 
     # Initialize - this creates a new session automatically.

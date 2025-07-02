@@ -1,13 +1,19 @@
 import asyncio
 import os
-
-from dotenv import load_dotenv
 from pydantic import BaseModel, Field
+import sys
+from pathlib import Path
 
-from stagehand import Stagehand, StagehandConfig
+# 添加项目根目录到Python路径，以便导入stagehand和配置
+current_dir = Path(__file__).parent
+project_root = current_dir.parent
+sys.path.insert(0, str(project_root))
 
-# Load environment variables
-load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
+from stagehand import Stagehand
+from stagehand_config import *
+
+# 加载环境变量
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 # Define Pydantic models for structured data extraction
 class Company(BaseModel):
@@ -19,17 +25,16 @@ class Companies(BaseModel):
     
 async def main():
     # Create configuration
+    # config = StagehandConfig(
+    #   local_gemini  # 本地Gemini
+    #   #  local_openai  # 本地OpenAI
+    #   #  local_claude  # 本地Claude
+    # )
+
     config = StagehandConfig(
-        # env = "BROWSERBASE", # or LOCAL
-        # api_key=os.getenv("BROWSERBASE_API_KEY"),
-        # project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
-        env = "LOCAL", # or LOCAL
         model_name="google/gemini-2.5-flash-preview-05-20",
         model_client_options={"apiKey": os.getenv("GOOGLE_API_KEY")},
     )
-
-    print(f"*****config: {config}")
-    
     stagehand = Stagehand(config)
     
     try:
