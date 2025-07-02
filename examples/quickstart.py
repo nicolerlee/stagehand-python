@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from stagehand import Stagehand, StagehandConfig
 
 # Load environment variables
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 # Define Pydantic models for structured data extraction
 class Company(BaseModel):
@@ -20,12 +20,15 @@ class Companies(BaseModel):
 async def main():
     # Create configuration
     config = StagehandConfig(
-        env = "BROWSERBASE", # or LOCAL
-        api_key=os.getenv("BROWSERBASE_API_KEY"),
-        project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
+        # env = "BROWSERBASE", # or LOCAL
+        # api_key=os.getenv("BROWSERBASE_API_KEY"),
+        # project_id=os.getenv("BROWSERBASE_PROJECT_ID"),
+        env = "LOCAL", # or LOCAL
         model_name="google/gemini-2.5-flash-preview-05-20",
-        model_client_options={"apiKey": os.getenv("MODEL_API_KEY")},
+        model_client_options={"apiKey": os.getenv("GOOGLE_API_KEY")},
     )
+
+    print(f"*****config: {config}")
     
     stagehand = Stagehand(config)
     

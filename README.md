@@ -204,6 +204,24 @@ await page.act(action_preview[0])
 If the website happens to change, `self_heal` will run the loop again to save you from constantly updating your scripts.
 
 
+## 源码编译运行
+1. 创建虚拟环境
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+
+2. 安装构建工具
+ python3 -m pip install --upgrade pip build
+
+3. 构建 Wheel
+python3 -m build --wheel
+
+# 安装包 
+python3 -m pip install dist/*.whl
+
+# 测试包
+python3 -c "import stagehand; print(stagehand.__version__)"
+
 ## Contributing
 
 At a high level, we're focused on improving reliability, speed, and cost in that order of priority. If you're interested in contributing, reach out on [Slack](https://stagehand.dev/slack), open an issue or start a discussion. 
@@ -218,7 +236,9 @@ git clone https://github.com/browserbase/stagehand-python.git
 cd stagehand-python
 
 # Install in editable mode with development dependencies
-pip install -r requirements.txt
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
 ```
 
 

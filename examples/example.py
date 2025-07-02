@@ -32,7 +32,7 @@ custom_theme = Theme(
 # Create a Rich console instance with our theme
 console = Console(theme=custom_theme)
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 console.print(
     Panel.fit(

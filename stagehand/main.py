@@ -30,7 +30,7 @@ from .metrics import StagehandFunctionName, StagehandMetrics
 from .page import StagehandPage
 from .utils import make_serializable
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 
 class Stagehand:
